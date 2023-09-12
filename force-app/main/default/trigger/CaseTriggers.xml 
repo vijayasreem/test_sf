@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Trigger xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Case Trigger Before Insert</description>
+    <apiVersion>45.0</apiVersion>
+    <isActive>true</isActive>
+    <triggerSource>from_clause</triggerSource>
+    <name>CaseBeforeInsert</name>
+    <tableEnumOrId>Case</tableEnumOrId>
+    <type>BeforeInsert</type>
+    <frameWorkVersion>45.0</frameWorkVersion>
+    <body>for (Case c : Trigger.new)
+	{
+		if (c.Date_Received__c == null)
+		{
+			c.Date_Received__c = System.today();
+		}
+
+		if (c.Provider_Name__c != null)
+		{
+			String pName = c.Provider_Name__c.replaceAll('[^A-Za-z]', '');
+			if (pName.length() > 50)
+			{
+				c.Provider_Name__c = pName.substring(0,50);
+			}
+			else
+			{
+				c.Provider_Name__c = pName;
+			}
+		}
+	}</body>
+</Trigger>
